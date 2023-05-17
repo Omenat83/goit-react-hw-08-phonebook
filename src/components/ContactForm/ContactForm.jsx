@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addContactsThunk } from 'Redux/thunks';
-import { getAllContacts } from '../../Redux/selectors';
+import { addContactsThunk } from 'Redux/Contacts/thunks';
+import { getAllContacts } from '../../Redux/Contacts/selectors';
 import {
   Form,
   FormItem,
@@ -11,7 +11,7 @@ import {
 } from './ContactForm.styled';
 import { toast } from 'react-hot-toast';
 
-export default function ContactForm() {
+export function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -48,7 +48,7 @@ export default function ContactForm() {
     } else {
       const newContact = {
         name: name,
-        phone: number,
+        number: number,
       };
       dispatch(addContactsThunk(newContact));
 

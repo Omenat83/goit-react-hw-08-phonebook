@@ -1,45 +1,53 @@
-import ContactForm from './ContactForm/ContactForm';
-import { ContactList } from './ContactList/ContactList';
-import { Filter } from './Filter/Filter';
-import { useDispatch, useSelector } from 'react-redux';
-import { getContactsThunk } from 'Redux/thunks';
-import { Toaster } from 'react-hot-toast';
-import { Container, Title, TitleContact, Message } from './App.styled';
-import { useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { Layout } from './Layout/Layout';
+import { useDispatch } from 'react-redux';
+import { useEffect, lazy } from 'react';
+import { refreshUser } from 'Redux/Auth/operations';
+import { useAuth } from 'Redux/Auth/selectors';
+import { RestrictedRoute } from './RestrictedRoute';
+import { PrivateRoute } from './PrivateRoute';
 
-export default function App() {
+const HomePage = lazy(() => import('../pages/Home/HomePage'));
+const RegisterPage = lazy(() => import('../pages/Register/RegisterPage'));
+const LoginPage = lazy(() => import('../pages/Login/LoginPage'));
+const ContactsPage = lazy(() => import('../pages/Contacts/ContactsPage'));
+
+export const App = () => {
   const dispatch = useDispatch();
-
-  const { items, isLoading, error } = useSelector(
-    state => state.contacts.contacts
-  );
+  const { isRefreshing } = useAuth();
 
   useEffect(() => {
-    dispatch(getContactsThunk());
+    dispatch(refreshUser());
   }, [dispatch]);
 
-  return (
-    <Container>
-      <Toaster
-        toastOptions={{
-          style: {
-            border: '1px solid blue',
-            padding: '15px',
-            marginTop: '30px',
-          },
-        }}
-      />
-      <Title>Phonebook</Title>
-      <ContactForm />
-      <TitleContact>Contacts</TitleContact>
-      <Filter />
-      {isLoading && <Message>Loading...</Message>}
-      {error && <Message>{error}</Message>}
-      {items.length > 0 ? (
-        <ContactList />
-      ) : (
-        <Message>Sorry, no contacts yet...</Message>
-      )}
-    </Container>
+  return isRefreshing ? (
+    'loading....'
+  ) : (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route
+          path="/register"
+          element={
+            <RestrictedRoute
+              component={<RegisterPage />}
+              redirectTo="/contacts"
+            />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RestrictedRoute component={<LoginPage />} redirectTo="/contacts" />
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PrivateRoute component={<ContactsPage />} redirectTo="/login" />
+          }
+        />
+      </Route>
+    </Routes>
   );
-}
+};

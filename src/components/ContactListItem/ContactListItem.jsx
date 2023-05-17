@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { ListItem, Button } from './ContactListItem.styled';
-import { deleteContactsThunk } from 'Redux/thunks';
+import { deleteContactsThunk } from 'Redux/Contacts/thunks';
 
 // відмальовка одного контакту зі списку
 export const ContactListItem = ({ id, name, number }) => {
@@ -10,7 +10,7 @@ export const ContactListItem = ({ id, name, number }) => {
   return (
     <ListItem key={id}>
       <p>
-      {name}: {number}
+        {name}: {number}
       </p>
       <Button type="button" onClick={() => dispatch(deleteContactsThunk(id))}>
         Delete
