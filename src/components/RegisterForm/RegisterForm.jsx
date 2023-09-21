@@ -28,15 +28,30 @@ export const RegisterForm = () => {
     <Form onSubmit={handleSubmit}>
       <FormItem>
         <FormLabel htmlFor="regName">UserName</FormLabel>
-        <FormInput id="regName" type="text" name="name" />
+        <FormInput
+          id="regName"
+          type="text"
+          name="name"
+          placeholder="enter name"
+        />
       </FormItem>
       <FormItem>
         <FormLabel htmlFor="regEmail">Email</FormLabel>
-        <FormInput id="regEmail" type="email" name="email" />
+        <FormInput
+          id="regEmail"
+          type="email"
+          name="email"
+          placeholder="enter correct email"
+        />
       </FormItem>
       <FormItem>
         <FormLabel htmlFor="regPassword">Password</FormLabel>
-        <FormInput id="regPassword" type="password" name="password" />
+        <FormInput
+          id="regPassword"
+          type="password"
+          name="password"
+          placeholder="minimum 7 characters"
+        />
       </FormItem>
       <FormButton type="submit">Register</FormButton>
     </Form>
